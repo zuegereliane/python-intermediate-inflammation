@@ -52,11 +52,6 @@ def analyse_data(data_source):
     data = data_source.load_inflammation_data()
     daily_standard_deviation = compute_standard_deviation_by_day(data)
 
-    # graph_data = {
-    #     'standard deviation by day': daily_standard_deviation,
-    # }
-    # views.visualize(graph_data)
-
     return daily_standard_deviation
 
 

@@ -27,8 +27,12 @@ def main(args):
             data_source = CSVDataSource(os.path.dirname(infiles[0]))
         else:
             raise ValueError(f'Unsupported data file format: {extension}')
-        analyse_data(data_source)
 
+        daily_standard_deviation = analyse_data(data_source)
+        graph_data = {
+            'standard deviation by day': daily_standard_deviation,
+        }
+        views.visualize(graph_data)
         return
 
     for filename in infiles:
