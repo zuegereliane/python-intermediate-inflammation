@@ -32,12 +32,20 @@ def test_daily_mean_integers():
     npt.assert_array_equal(daily_mean(test_input), test_result)
 
 
-@pytest.mark.parametrize('data, expected_standard_deviation', [
-    ([0, 0, 0], 0.0),
-    ([1.0, 1.0, 1.0], 0),
-    ([0.0, 2.0], 1.0)
+@pytest.mark.parametrize('data, expected_standard_deviation, raises_assertion_error', [
+    ([0, 0, 0], 0.0, False),
+    ([1.0, 1.0, 1.0], 0, False),
+    ([0.0, 2.0], 1.0, False),
+    ([0.0, 2.0], 0.0, True),
+    ([[0.0, 2.0], [1.0, 1.0]], [0.25, 0.25], False),
+    ([[-1.0, -1.0]], [0., 0.], False)
 ])
-def test_daily_standard_deviation(data, expected_standard_deviation):
-    from inflammation.models import s_dev
-    result_data = s_dev(data)['standard deviation']
-    npt.assert_approx_equal(result_data, expected_standard_deviation)
+def test_daily_standard_deviation(data, expected_standard_deviation, raises_assertion_error):
+    from inflammation.models import daily_standard_deviation
+    result_data = daily_standard_deviation(data)
+
+    if raises_assertion_error:
+        with pytest.raises(AssertionError):
+            npt.assert_array_equal(np.array(result_data), np.array(expected_standard_deviation))
+    else:
+        npt.assert_array_equal(np.array(result_data), np.array(expected_standard_deviation))
